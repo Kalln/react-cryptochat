@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Rand_name } from "./Random_name.js";
 import "./Settings.css";
 
 import Stars from "../Backgrounds/StarStruck.png"
@@ -24,6 +25,13 @@ export const Popup = ({ text, closePopup, setUsername, setBg, Bg }: any) => {
             }}
           />
         </label>
+        <button onClick={() => 
+        {let temp = Rand_name();
+         setName(temp);
+         setUsername(temp);
+        }
+      
+         }>Generate name</button>
         <br></br>
         <label>
           Change setting 
