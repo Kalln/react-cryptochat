@@ -5,7 +5,7 @@ import Stars from "../Backgrounds/StarStruck.png"
 import Rat from ".././Backgrounds/CryptoRat.png"
 import Salad from ".././Backgrounds/AnarchySalad.jpg"
 
-export const Popup = ({ text, closePopup, setUsername, setBg }) => {
+export const Popup = ({ text, closePopup, setUsername, setBg }: any) => {
 
   let Bg = Stars;
 
