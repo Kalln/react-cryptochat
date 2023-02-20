@@ -6,9 +6,10 @@ import Stars from "../Backgrounds/StarStruck.png"
 import Rat from ".././Backgrounds/CryptoRat.png"
 import Salad from ".././Backgrounds/AnarchySalad.jpg"
 
-export const Popup = ({ text, closePopup, setUsername, setBg, Bg }: any) => {
+export const Popup = ({ text, closePopup, setUsername, setBg, Bg, setKey, Key }: any) => {
 
   const [Name, setName] = useState("")
+  const [Keyname, setKeyname] = useState("")
   
   return (
       <div className="popup-container">
@@ -33,8 +34,21 @@ export const Popup = ({ text, closePopup, setUsername, setBg, Bg }: any) => {
       
          }>Generate name</button>
         <br></br>
+
         <label>
-          Change setting 
+          Key
+          <input 
+          value={Key}
+          onChange={(event) => {
+            setKeyname(event.target.value);
+            setKey(event.target.value);
+            }}
+          />
+        </label>
+
+        <br></br>
+        <label>
+          Change theme 
             <select value={Bg} onChange={(event) => {setBg(event.target.value)}}>
 
               <option value={Stars}>StarStruck</option>
