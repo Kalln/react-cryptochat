@@ -5,9 +5,7 @@ import Stars from "../Backgrounds/StarStruck.png"
 import Rat from ".././Backgrounds/CryptoRat.png"
 import Salad from ".././Backgrounds/AnarchySalad.jpg"
 
-export const Popup = ({ text, closePopup, setUsername, setBg }: any) => {
-
-  let Bg = Stars;
+export const Popup = ({ text, closePopup, setUsername, setBg, Bg }: any) => {
 
   const [Name, setName] = useState("")
   

@@ -17,7 +17,7 @@ function App() {
 
       <button onClick={() => setPopup_flag(true)}>Settings</button>
 
-        {Popup_flag ? <Popup setBg={setBg} setUsername={setUsername} text="Settings" 
+        {Popup_flag ? <Popup Bg={Bg} setBg={setBg} setUsername={setUsername} text="Settings" 
         closePopup={() => setPopup_flag(false)}/> : null} 
       
       <h1>Hej {Username}</h1> 
