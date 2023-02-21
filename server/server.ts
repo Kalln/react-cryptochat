@@ -1,61 +1,27 @@
-import { Request, Express, Response } from 'express';
-import * as cors from 'cors';
+import * as express from 'express';
+require('dotenv').config();
 
-type message = {
-    msg: string,
-    name: string,
-    date: Date
-};
-const express = require('express');
-const path = require('path');   
+import { router } from './routes/messages';
+// Express app
+const app = express();
 
 
-const app: Express = express();
-const PORT: number = 8000;
-
-
-/**
- * INPUT
- */
-const test_msg: message= {
-    msg: "Hello everyone!",
-    name: "Anonymous",
-    date: new Date()
-};
-
-//app.use(express.static(path.resolve(__dirname, '../build')));
-app.use(cors);
+// middleware
 app.use(express.json());
-
-const allowedOrigins = ['http://localhost:3000', 'http://localhost:8000'];
-const options: cors.CorsOptions = {
-    origin: allowedOrigins
-};
-app.use(cors(options));
-
-// Gets all message.
-app.get('/getAllMessages', (req: Request, res: Response) => {
-    //res.json({msg: 'this is from /api. '});
-    res.json(test_msg);
-    //res.send('Get all messages');
-});
-
-
-// post chat message to server.
-app.post('/postChat', (req: Request, res: Response) => {
-    //res.json({msg: 'this is from /api. '});
-    res.json(req);
-    console.log(req);
-    //res.send('Get all messages');
+app.use((req, res, next) => {
+    console.log(req.path, req.method);
+    next();
 })
 
+// route
+app.use('/api/messages', router);
 
-/**
- * FOR FUTURE:
- * DELETE MESSAGE
- * GET ONE MESSAGE?
- */
+app.get('/', (req, res) => {
+    res.json({msg: 'welcome to our app'});
+})
 
-app.listen(PORT, () => {
-    console.log('[SERVER]: Server is running on port:', PORT);
-});
+// Listen for requests
+
+app.listen(process.env.PORT, () => {
+    console.log("Listening on port", process.env.PORT);
+})
