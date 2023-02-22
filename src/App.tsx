@@ -1,17 +1,25 @@
 import './App.css';
-import React, { useState } from 'react'
-
-import { InputTest } from './components/InputTest';
-
-
+import React, { useState } from 'react';
+import { Popup } from "./components/Settings"
+import { Messager } from "./components/Message_window.js"
 
 function App() {
   return (
-  <div>
-            <InputTest />
-            <p>hello</p>
-        </div>
-  
+    <div style={{ backgroundImage: `url(${Bg})` }}>
+
+      <button onClick={() => setPopup_flag(true)}>Settings</button>
+
+        {Popup_flag ? <Popup Key={Key} setKey={setKey} Bg={Bg} setBg={setBg} setUsername={setUsername} text="Settings" 
+        closePopup={() => setPopup_flag(false)}/> : null} 
+      
+      <h1>Hej {Username}</h1> 
+      
+      <main>
+      Welcome to CryptoChat. Press the settings-button in the top-left corner if you wish to change your name, encryption key or the theme.
+      CryptoChat encrypts the contets of your messages, but your name will still be visible to all. Happy chatting!
+      </main>
+      {Messager(Key)}
+    </div>
   );
 }
 
