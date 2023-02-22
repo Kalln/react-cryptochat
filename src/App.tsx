@@ -3,18 +3,7 @@ import React, { useState } from 'react';
 import { Popup } from "./components/Settings"
 import { Messager } from "./components/Message_window.js"
 
-import Stars from "./Backgrounds/StarStruck.png"
-
 function App() {
-
-  const [Popup_flag, setPopup_flag] = useState(true);
-
-  const [Username, setUsername] = useState("");
-
-  const [Bg, setBg] = useState(Stars)
-
-  const [Key, setKey] = useState("apa")
-  
   return (
     <div style={{ backgroundImage: `url(${Bg})` }}>
 
