@@ -1,5 +1,4 @@
-import react, { useState } from "react";
-
+import { useState } from "react";
 
 export const InputTest = () => {
 
@@ -15,7 +14,7 @@ export const InputTest = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ msg_str: msg, name: "test name", id: 1 })
         };
-        fetch('http://localhost:8000/postChat', requestOptions)
+        fetch('http://localhost:4000/api/messages', requestOptions)
         .then(response => response.json())
         .then(data => console.log(data));
         
@@ -34,3 +33,4 @@ export const InputTest = () => {
 
     );
 };
+

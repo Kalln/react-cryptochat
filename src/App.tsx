@@ -1,14 +1,23 @@
 import './App.css';
 import React, { useState } from 'react';
-import { Popup } from "./components/Settings"
-import { Messages } from "./Messages.js"
+import { Popup } from "./components/Settings";
+import { Messages } from "./components/Messages";
+import Stars from "./Backgrounds/StarStruck.png";
+import { InputTest } from './components/InputTest';
 
 function App() {
+  
+  const [Popup_flag, setPopup_flag] = useState(true);
+  const [Username, setUsername] = useState("");
+  const [Bg, setBg] = useState(Stars);
+  const [Key, setKey] = useState("apa");
+
   return (
+    
     <div style={{ backgroundImage: `url(${Bg})`, height: '800px' }}>
       <button onClick={() => setPopup_flag(true)}>Settings</button>
 
-        {Popup_flag ? <Popup Key={Key} setKey={setKey} Bg={Bg} setBg={setBg} setUsername={setUsername} text="Settings" 
+        {Popup_flag ? <Popup Username={Username} Key={Key} setKey={setKey} Bg={Bg} setBg={setBg} setUsername={setUsername} text="Settings" 
         closePopup={() => setPopup_flag(false)}/> : null} 
 
       <h1 style={{textAlign: 'center'}}> Hi {Username}!</h1> 
@@ -17,9 +26,11 @@ function App() {
       CryptoChat encrypts the contets of your messages, but your name will still be visible to all. Happy chatting!
       </main>
 
-      {Messages(Key)}
+      {Messages(Key, Username)}
+
     </div>
+
   );
 }
 
-export default App
+export default App;

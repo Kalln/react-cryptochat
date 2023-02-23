@@ -8,4 +8,4 @@ export function Rand_name() {
     return förnamn + " den " + titel;
 }
 
-export default Rand_name
+export default Rand_name;
