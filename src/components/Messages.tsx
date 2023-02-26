@@ -15,8 +15,7 @@ export const Messages = (Key: string, Username: string) => {
             
             if (response.ok) setAllMsgs(msg_json);
         }
-        fetchMessags();
-        
+        setInterval(fetchMessags, 1000);
         
     }, []);
 
@@ -33,10 +32,11 @@ export const Messages = (Key: string, Username: string) => {
             console.log("all ok");
         }
         setMsg("");
+
     }
     return (
         <div style={{
-                backgroundColor: 'white',
+                background: 'transparent', 
                 justifyContent:'bottom-center',
                 alignItems:'center',
                 width: '700px',
@@ -51,15 +51,13 @@ export const Messages = (Key: string, Username: string) => {
                     {AllMsgs.map((mssg) => {
                         return (
                             <div className="message">
-                                <p style={{fontSize: "0.7em"}}>{mssg.name}</p><br/>
+                                <p style={{fontSize: "0.7em"}}>{mssg.name}</p>
                                 <p>{decryptor(mssg.msg, Key)}</p>
                             </div>
-
-
                         );
                     })}
              </ScrollToBottom>
-             <input value={Msg} onChange={(event) => {setMsg(event.target.value)}}></input>
+             <input className='input-body' value={Msg} onChange={(event) => {setMsg(event.target.value)}}></input>
             <button value={Msg} onClick={send}>Send message</button>
             </div>
               

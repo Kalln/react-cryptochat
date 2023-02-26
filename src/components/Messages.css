@@ -16,3 +16,8 @@
     overflow-y: scroll;
     overflow-x: hidden;
 }
+
+.input-body {
+    width: 575px;
+    height: auto;
+}
