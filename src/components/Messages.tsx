@@ -58,9 +58,9 @@ export const Messages = (Key: string, Username: string) => {
 
                         );
                     })}
-                <input value={Msg} onChange={(event) => {setMsg(event.target.value)}}></input>
-                <button value={Msg} onClick={send}>Send message</button>
-              </ScrollToBottom>
+             </ScrollToBottom>
+             <input value={Msg} onChange={(event) => {setMsg(event.target.value)}}></input>
+            <button value={Msg} onClick={send}>Send message</button>
             </div>
               
         </div>
