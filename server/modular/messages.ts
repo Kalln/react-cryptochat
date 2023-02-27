@@ -1,15 +1,18 @@
 import { Router, Request, Response } from "express";
 
 export type message = {
-    msg: string, 
+    msg: Array<number>, 
     name: string,
-    id: number
+    msg_id: number,
+    createdAt: Date
 };
 const msg_array = new Array<message>; // Database
 export const router = Router();
 
 //ID generator
-
+function id_generator(): number {
+    return Math.floor(Date.now() * Math.random());
+}
 
 // Routes
 /**
@@ -36,7 +39,12 @@ router.get('/', (req: Request, res: Response) => {
 router.post('/', (req: Request, res: Response) => {
     const {messagestring, username} = req.body;
     try {
-        const msg: message = {msg: messagestring, name: username, id: 1};
+        const msg: message = {
+            msg: messagestring,
+            name: username,
+            msg_id: id_generator(),
+            createdAt: new Date()
+        };
         msg_array.push(msg);
         res.status(200).json(msg);
     } catch (err: any) {
