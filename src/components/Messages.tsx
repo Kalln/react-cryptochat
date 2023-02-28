@@ -1,26 +1,39 @@
 import './Messages.css';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, SyntheticEvent } from "react";
 import ScrollToBottom from "react-scroll-to-bottom"
-import { decryptor, encryptor } from './Encrypter';
+import { decryptor, encryptor } from '../../lib/Encrypter';
+
+type Message = {
+    msg: Array<number>,
+    name: string,
+    msg_id: number, 
+    created_at: Date,
+};
 
 export const Messages = (Key: string, Username: string) => {
 
     const [Msg, setMsg] = useState("");
-    const [AllMsgs, setAllMsgs] = useState<any[]>([]);;
+    const [AllMsgs, setAllMsgs] = useState<Array<Message> | undefined>(undefined);
     
     useEffect(() => {
         const fetchMessags = async () => {
             const response = await fetch('/api/messages');
-            const msg_json = await response.json();
+            const msg_json: Array<Message> = await response.json();
             
             if (response.ok) setAllMsgs(msg_json);
         }
-        setInterval(fetchMessags, 1000);
-        
+        setInterval(fetchMessags, 1000); 
     }, []);
 
-    const send = async (e: any) => {
+    const send = async (e: SyntheticEvent) => {
         e.preventDefault();
+       
+        // prevents sending empty messages to server
+        if (Msg === "") {
+            return;
+        }
+
+        // creates new message object and sends message to server 
         const user_message = {messagestring: encryptor(Msg, Key), username: Username};
         console.log(AllMsgs);
         const response = await fetch('/api/messages', {
@@ -32,8 +45,9 @@ export const Messages = (Key: string, Username: string) => {
             console.log("all ok");
         }
         setMsg("");
+    };
+    
 
-    }
     return (
         <div style={{
                 background: 'transparent', 
@@ -48,7 +62,7 @@ export const Messages = (Key: string, Username: string) => {
             
             <div className="chat-body">
               <ScrollToBottom className="message-container">
-                    {AllMsgs.map((mssg) => {
+                    {AllMsgs !== undefined && AllMsgs.map((mssg) => {
                         return (
                             <div className="message">
                                 <p style={{fontSize: "0.7em"}}>{mssg.name}</p>
@@ -57,13 +71,17 @@ export const Messages = (Key: string, Username: string) => {
                         );
                     })}
              </ScrollToBottom>
-             <input className='input-body' value={Msg} onChange={(event) => {setMsg(event.target.value)}}></input>
-            <button value={Msg} onClick={send}>Send message</button>
+             <div tabIndex={-1}>
+                <input className='input-body' 
+                        value={Msg}
+                        onChange={event => {setMsg(event.target.value)}}
+                        onKeyDown={event => {if (event.key === 'Enter') send(event)}}
+                />
+                <button value={Msg} onClick={send}>Send message</button>
+             </div>
+ 
             </div>
               
         </div>
     );
 };
-
-/* <input value={Msg} onChange={(event) => setMsg(event.target.value)}/>
-<button onClick={send}>Send Message</button> */
