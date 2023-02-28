@@ -1,7 +1,7 @@
 import './Messages.css';
 import React, { useState, useEffect, SyntheticEvent } from "react";
 import ScrollToBottom from "react-scroll-to-bottom"
-import { decryptor, encryptor } from '../../lib/Encrypter';
+import { decryptor, encryptor } from '../lib/Encrypter';
 
 type Message = {
     msg: Array<number>,
