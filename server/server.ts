@@ -3,16 +3,8 @@ import { router } from './modular/messages';
 const express = require('express');
 require('dotenv').config(); // how can we get rid of require?
 
-type message = {
-    msg: string,
-    name: string,
-    id: number
-}
-
 // Initilize express app and create the "database" that in our case is a simple array.
 const app = express();
-const msg_array = new Array<message>;
-
 
 // This makes it possible to pass json objects.
 app.use(express.json());

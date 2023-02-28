@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { Popup } from "./components/Settings";
 import { Messages } from "./components/Messages";
 import Stars from "./Backgrounds/StarStruck.png";
-import { InputTest } from './components/InputTest';
 
 function App() {
   
