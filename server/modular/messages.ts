@@ -1,11 +1,17 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 
+const valid_error = ['OK', 'no-msg', 'no-name', 'typeerror-msg', 'typeerror-name'] as const;
+type valid_error_type = (typeof valid_error)[number];
 export type message = {
     msg: Array<number>, 
     name: string,
     msg_id: number,
     createdAt: Date
 };
+interface pre_message {
+    msg: Array<number>,
+    name: string
+}
 const msg_array = new Array<message>; // Database
 export const router = Router();
 
@@ -15,6 +21,27 @@ function id_generator(): number {
 }
 
 // Routes
+
+/**
+ * Middleware, this is called before a GET or POST request.
+ * Since we want to check if the request is in correct format,
+ * this only handles POST requests for now. 
+ */
+router.use((req: Request, res: Response, next: NextFunction) => {
+    if (req.method === 'POST') {
+        const content_error: valid_error_type = check_valid_msg_post(req);
+        if (is_valid_error_message(content_error)) {
+            if (content_error === 'OK') next();
+            res.status(400).json({error: handle_error_message(content_error)});
+            return
+        } else {
+            res.status(400).json({error: 'Something went wrong, try again.'});
+            return;
+        }
+    }
+    next();
+})
+
 /**
  * When GET method is called on 'http://localhost:4000/api/messages'
  * all previous sent messages by the POST request will be sent to the client. 
@@ -50,4 +77,74 @@ router.post('/', (req: Request, res: Response) => {
     } catch (err: any) {
         res.status(400).json({error: err.message});
     }
-})
+});
+
+/**
+ * If there is an error with the request this will specify the error.
+ * 
+ * @param req {Request} - A request from a client.
+ * @returns a valid_error_type
+ */
+function check_valid_msg_post(req: Request): valid_error_type {
+
+    function check_post_content(req: Request): number {
+
+        return !req.body.messagestring
+        ? 400 // message is missing
+        : !req.body.username || req.body.username === ''
+        ? 401 // username is missing
+        : 200 // all OK
+    }
+
+    const result_content_check: number = check_post_content(req);
+
+    if (result_content_check !== 200) {
+        console.log('message not valid');
+        return result_content_check === 400 
+        ? 'no-msg'
+        : 'no-name';
+    }
+    // Body ok, check types are correct.
+    const {messagestring, username} = req.body;
+    const pre: pre_message = {
+        msg: messagestring,
+        name: username
+    };
+
+    for (let i = 0; i < pre.msg.length; i++) {
+        if (typeof(pre.msg[i]) !== 'number') {
+           return 'typeerror-msg';
+        }
+    }
+    return typeof(pre.name) === 'string' 
+    ? 'OK'
+    : 'typeerror-name';
+}
+
+/**
+ * Credits to Patrick Roberts for this function and defining the types: 
+ * https://stackoverflow.com/questions/57065617
+ * 
+ * Checks if a string is of type valid_error_type}
+ * @param error_msg {string} - takes a error message
+ * @returns a boolean, if true: error_msg is a valid_error_type
+ */
+function is_valid_error_message(error_msg: string): error_msg is valid_error_type  {
+    return (valid_error as readonly string[]).includes(error_msg);
+}
+
+/**
+ * Takes an error message and returns more detailed error message 
+ * @param error_msg {valid_error_type} - takes a error_msg
+ * @returns a string with the correct kind of error message to inform the user
+ */
+function handle_error_message(error_msg: valid_error_type): string {
+
+    return error_msg === 'no-msg'
+    ? 'No message was detected, try again'
+    : error_msg === 'no-name'
+    ? 'No name was chosen, click on the settings button on the upper left corner'
+    : error_msg === 'typeerror-msg'
+    ? 'Something went wrong, the message had wrong format, write a new message'
+    : 'Something went worng, the username had wrong format, choose a new name';
+}
