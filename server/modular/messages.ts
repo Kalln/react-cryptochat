@@ -1,12 +1,14 @@
 import { Router, Request, Response, NextFunction } from "express";
+import { stringify } from "querystring";
 
 const valid_error = ['OK', 'no-msg', 'no-name', 'typeerror-msg', 'typeerror-name'] as const;
 type valid_error_type = (typeof valid_error)[number];
 export type message = {
     msg: Array<number>, 
     name: string,
+    user_id: number,
     msg_id: number,
-    createdAt: Date
+    createdAt: string
 };
 interface pre_message {
     msg: Array<number>,
@@ -15,9 +17,17 @@ interface pre_message {
 const msg_array = new Array<message>; // Database
 export const router = Router();
 
-//ID generator
-function id_generator(): number {
-    return Math.floor(Date.now() * Math.random());
+//ID generator, generates a 12 digit number 
+export function id_generator(user_id: number): number {
+    return parseInt(user_id.toString() + "100000") + parseInt((Math.floor(100000 * Math.random()).toString()));
+}
+
+function create_timestamp(): string {
+    const curr_date = new Date();
+    const current_hour = curr_date.getHours() + 1 % 24;
+    const current_min = curr_date.getMinutes();
+    const current_sec = curr_date.getSeconds();
+    return current_hour + ":" + current_min + ":" + current_sec;
 }
 
 // Routes
@@ -64,13 +74,15 @@ router.get('/', (req: Request, res: Response) => {
  * the databse.
  */
 router.post('/', (req: Request, res: Response) => {
-    const {messagestring, username} = req.body;
+    const {messagearray, username, user_id} = req.body;
+    console.log(messagearray, username, user_id);
     try {
         const msg: message = {
-            msg: messagestring,
+            msg: messagearray,
             name: username,
-            msg_id: id_generator(),
-            createdAt: new Date()
+            user_id: user_id,
+            msg_id: id_generator(user_id),
+            createdAt: create_timestamp()
         };
         msg_array.push(msg);
         res.status(200).json(msg);
@@ -89,7 +101,7 @@ function check_valid_msg_post(req: Request): valid_error_type {
 
     function check_post_content(req: Request): number {
 
-        return !req.body.messagestring
+        return !req.body.messagearray
         ? 400 // message is missing
         : !req.body.username || req.body.username === ''
         ? 401 // username is missing
@@ -105,9 +117,9 @@ function check_valid_msg_post(req: Request): valid_error_type {
         : 'no-name';
     }
     // Body ok, check types are correct.
-    const {messagestring, username} = req.body;
+    const {messagearray, username} = req.body;
     const pre: pre_message = {
-        msg: messagestring,
+        msg: messagearray,
         name: username
     };
 
@@ -148,3 +160,5 @@ function handle_error_message(error_msg: valid_error_type): string {
     ? 'Something went wrong, the message had wrong format, write a new message'
     : 'Something went worng, the username had wrong format, choose a new name';
 }
+
+

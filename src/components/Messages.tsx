@@ -6,11 +6,12 @@ import { decryptor, encryptor } from '../lib/Encrypter';
 type Message = {
     msg: Array<number>,
     name: string,
+    user_id: number,
     msg_id: number, 
-    created_at: Date,
+    createdAt: string,
 };
 
-export const Messages = (Key: string, Username: string) => {
+export const Messages = (Key: string, Username: string, user_idn: number) => {
 
     const [Msg, setMsg] = useState("");
     const [AllMsgs, setAllMsgs] = useState<Array<Message> | undefined>(undefined);
@@ -34,7 +35,7 @@ export const Messages = (Key: string, Username: string) => {
         }
 
         // creates new message object and sends message to server 
-        const user_message = {messagestring: encryptor(Msg, Key), username: Username};
+        const user_message = {messagearray: encryptor(Msg, Key), username: Username, user_id: user_idn};
         console.log(AllMsgs);
         const response = await fetch('/api/messages', {
             method: 'POST',
@@ -63,12 +64,21 @@ export const Messages = (Key: string, Username: string) => {
             <div className="chat-body">
               <ScrollToBottom className="message-container">
                     {AllMsgs !== undefined && AllMsgs.map((mssg) => {
-                        return (
-                            <div className="message">
-                                <p style={{fontSize: "0.7em"}}>{mssg.name}</p>
-                                <p>{decryptor(mssg.msg, Key)}</p>
-                            </div>
-                        );
+                        if (mssg.user_id !== user_idn) {
+                            return (
+                                <div className="message">
+                                    <p style={{fontSize: "0.7em"}}>{mssg.name} - {mssg.createdAt}</p>
+                                    <p>{decryptor(mssg.msg, Key)}</p>
+                                </div> 
+                            );  
+                        } else {
+                            return (
+                                <div className="message">
+                                    <p style={{color: "green", fontSize: "0.7em"}}>{mssg.name} - {mssg.createdAt}</p>
+                                    <p>{decryptor(mssg.msg, Key)}</p>
+                                </div>
+                            );
+                        }
                     })}
              </ScrollToBottom>
              <div tabIndex={-1}>

@@ -10,6 +10,7 @@ function App() {
   const [Username, setUsername] = useState("");
   const [Bg, setBg] = useState(Stars);
   const [Key, setKey] = useState("apa");
+  const [id] = useState(Date.now() % 500000)
 
   return (
     
@@ -25,7 +26,7 @@ function App() {
       CryptoChat encrypts the contets of your messages, but your name will still be visible to all. Happy chatting!
       </main>
 
-      {Messages(Key, Username)}
+      {Messages(Key, Username, id)}
 
     </div>
 
@@ -33,3 +34,4 @@ function App() {
 }
 
 export default App;
+
