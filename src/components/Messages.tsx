@@ -1,7 +1,7 @@
 import './Messages.css';
 import React, { useState, useEffect, SyntheticEvent } from "react";
 import ScrollToBottom from "react-scroll-to-bottom"
-import { decryptor, encryptor } from '../lib/Encrypter';
+import { decrypt, encrypt } from '../lib/Encryption';
 
 type Message = {
     msg: Array<number>,
@@ -35,7 +35,7 @@ export const Messages = (Key: string, Username: string, user_idn: number) => {
         }
 
         // creates new message object and sends message to server 
-        const user_message = {messagearray: encryptor(Msg, Key), username: Username, user_id: user_idn};
+        const user_message = {messagearray: encrypt(Msg, Key), username: Username, user_id: user_idn};
         console.log(AllMsgs);
         const response = await fetch('/api/messages', {
             method: 'POST',
@@ -64,21 +64,12 @@ export const Messages = (Key: string, Username: string, user_idn: number) => {
             <div className="chat-body">
               <ScrollToBottom className="message-container">
                     {AllMsgs !== undefined && AllMsgs.map((mssg) => {
-                        if (mssg.user_id !== user_idn) {
-                            return (
-                                <div className="message">
-                                    <p style={{fontSize: "0.7em"}}>{mssg.name} - {mssg.createdAt}</p>
-                                    <p>{decryptor(mssg.msg, Key)}</p>
-                                </div> 
-                            );  
-                        } else {
-                            return (
-                                <div className="message">
-                                    <p style={{color: "green", fontSize: "0.7em"}}>{mssg.name} - {mssg.createdAt}</p>
-                                    <p>{decryptor(mssg.msg, Key)}</p>
-                                </div>
-                            );
-                        }
+                        return (
+                            <div className="message">
+                                <p style={{fontSize: "0.7em"}}>{mssg.name}</p>
+                                <p>{decryptor(mssg.msg, Key)}</p>
+                            </div>
+                        );
                     })}
              </ScrollToBottom>
              <div tabIndex={-1}>
