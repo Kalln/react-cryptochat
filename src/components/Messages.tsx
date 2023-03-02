@@ -1,7 +1,7 @@
 import './Messages.css';
 import React, { useState, useEffect, SyntheticEvent } from "react";
 import ScrollToBottom from "react-scroll-to-bottom"
-import { decryptor, encryptor } from '../lib/Encrypter';
+import { decrypt, encrypt } from '../lib/Encryption';
 
 type Message = {
     msg: Array<number>,
@@ -34,7 +34,7 @@ export const Messages = (Key: string, Username: string) => {
         }
 
         // creates new message object and sends message to server 
-        const user_message = {messagestring: encryptor(Msg, Key), username: Username};
+        const user_message = {messagestring: encrypt(Msg, Key), username: Username};
         console.log(AllMsgs);
         const response = await fetch('/api/messages', {
             method: 'POST',
@@ -66,7 +66,7 @@ export const Messages = (Key: string, Username: string) => {
                         return (
                             <div className="message">
                                 <p style={{fontSize: "0.7em"}}>{mssg.name}</p>
-                                <p>{decryptor(mssg.msg, Key)}</p>
+                                <p>{decrypt(mssg.msg, Key)}</p>
                             </div>
                         );
                     })}
