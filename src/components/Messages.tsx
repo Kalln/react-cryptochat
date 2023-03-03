@@ -17,13 +17,13 @@ export const Messages = (Key: string, Username: string, user_idn: number) => {
     const [AllMsgs, setAllMsgs] = useState<Array<Message> | undefined>(undefined);
     
     useEffect(() => {
-        const fetchMessags = async () => {
+        const fetchMessages = async () => {
             const response = await fetch('/api/messages');
             const msg_json: Array<Message> = await response.json();
             
             if (response.ok) setAllMsgs(msg_json);
         }
-        setInterval(fetchMessags, 1000); 
+        setInterval(fetchMessages, 1000); 
     }, []);
 
     const send = async (e: SyntheticEvent) => {

@@ -10,7 +10,7 @@ function App() {
   const [Username, setUsername] = useState("");
   const [Bg, setBg] = useState(Stars);
   const [Key, setKey] = useState("apa");
-  const [id] = useState(Date.now() % 500000)
+  const [id] = useState(Math.floor(100000 + Math.random() * 900000))
 
   return (
     
