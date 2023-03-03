@@ -1,14 +1,14 @@
-//import {describe, expect, test} from '@jest/globals';
-
-//import { type message } from '../modular/messages'
-//import supertest = require('supertest');
-//const request = require('supertest');
 const request = require('supertest');
 
 const host = 'http://localhost:4000/api/messages';
 const correct_post = {messagearray: [2, 45, 23], username: "test", user_id: Math.floor(100000 + Math.random() * 900000)}
 /**
  * TEST API
+ * 
+ * TO RUN THE TEST: 
+ * 'npm run test'
+ * otherwise the test will not work properly, the script run is: 
+ * "tsc --strict *.ts; node server.js & jest --runInBand" (located in package.json)
  */
 
 afterAll(() => {
