@@ -1,5 +1,4 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { stringify } from "querystring";
 
 const valid_error = ['OK', 'no-msg', 'no-name', 'typeerror-msg', 'typeerror-name'] as const;
 type valid_error_type = (typeof valid_error)[number];
@@ -22,7 +21,7 @@ export function id_generator(user_id: number): number {
     return parseInt(user_id.toString() + "100000") + parseInt((Math.floor(100000 * Math.random()).toString()));
 }
 
-function create_timestamp(): string {
+export function create_timestamp(): string {
     const curr_date = new Date();
     const current_hour = curr_date.getHours() + 1 % 24;
     const current_min = curr_date.getMinutes();
@@ -41,9 +40,13 @@ router.use((req: Request, res: Response, next: NextFunction) => {
     if (req.method === 'POST') {
         const content_error: valid_error_type = check_valid_msg_post(req);
         if (is_valid_error_message(content_error)) {
-            if (content_error === 'OK') next();
-            res.status(400).json({error: handle_error_message(content_error)});
-            return
+            if (content_error === 'OK') {
+                next();
+            } 
+            else {
+                res.status(400).json({error: handle_error_message(content_error)});
+                return
+            }  
         } else {
             res.status(400).json({error: 'Something went wrong, try again.'});
             return;
@@ -158,7 +161,7 @@ function handle_error_message(error_msg: valid_error_type): string {
     ? 'No name was chosen, click on the settings button on the upper left corner'
     : error_msg === 'typeerror-msg'
     ? 'Something went wrong, the message had wrong format, write a new message'
-    : 'Something went worng, the username had wrong format, choose a new name';
+    : 'Something went wrong, the username had wrong format, choose a new name';
 }
 
 
