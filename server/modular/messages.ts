@@ -23,7 +23,7 @@ export function id_generator(user_id: number): number {
 
 export function create_timestamp(): string {
     const curr_date = new Date();
-    const current_hour = curr_date.getHours() + 1 % 24;
+    const current_hour = curr_date.getHours() % 24;
     const current_min = curr_date.getMinutes();
     const current_sec = curr_date.getSeconds();
     return current_hour + ":" + current_min + ":" + current_sec;
