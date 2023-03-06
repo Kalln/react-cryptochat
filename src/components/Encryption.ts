@@ -27,7 +27,7 @@ export function encrypt(msg: string, key: string): Array<number> {
 }
 
 /**
- * Encrypts a string and return the encrypted string in the form of an array
+ * Decrypts an array of numbers, as encrypted by encrypt, into a string
  *
  * @param {Array<numbers>} encrypted -the string to be encrypted
  * @param  {string} key -the key used to decrypt the message
@@ -43,6 +43,3 @@ export function decrypt(encrypted: Array<number>, key: string): string {
     }
     return msg;
 }
-
-console.log(encrypt("hej", "apa"));
-console.log(decrypt([ 154, 201, 256 ], "apa"));
