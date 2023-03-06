@@ -73,7 +73,7 @@ export const Messages = (Key: string, Username: string, user_idn: number) => {
                             );  
                         } else {
                             return (
-                                <div className="message">
+                                <div className="my_message">
                                     <p style={{color: "green", fontSize: "0.7em"}}>{mssg.name} - {mssg.createdAt}</p>
                                     <p>{decrypt(mssg.msg, Key)}</p>
                                 </div>
