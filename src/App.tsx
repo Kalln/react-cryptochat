@@ -9,7 +9,7 @@ function App() {
   const [Popup_flag, setPopup_flag] = useState(true);
   const [Username, setUsername] = useState("");
   const [Bg, setBg] = useState(Stars);
-  const [Key, setKey] = useState("apa");
+  const [Key, setKey] = useState("");
   const [id] = useState(Math.floor(100000 + Math.random() * 900000))
 
   return (
