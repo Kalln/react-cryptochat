@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Rand_name } from "../lib/Random_name";
+import { Rand_name } from "./Random_name";
 import './Settings.css'
 
 import Stars from "../Backgrounds/StarStruck.png"
